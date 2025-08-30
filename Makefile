@@ -33,7 +33,7 @@ H8WRITE_SERDEV = /dev/ttyUSB0
 
 VPATH = $(SRCDIR)
 
-C_SOURCES = main.c lib.c serial.c vector.c xmodem.c
+C_SOURCES = main.c lib.c serial.c vector.c xmodem.c elf.c
 S_SOURCES = startup.s
 
 OBJS = $(addprefix $(BUILDDIR)/, $(C_SOURCES:.c=.o) $(S_SOURCES:.s=.o))
