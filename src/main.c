@@ -48,11 +48,13 @@ int main(void) {
   static char buf[16];
   static long size = -1;
   static unsigned char *loadbuf = NULL;
+  char *entry_point;
+  void (*f)(void);
   extern int buffer_start;
 
   init();
 
-  puts("kzload (kozos boot loader) started.\n");
+  puts("\nkzload (kozos boot loader) started.\n");
 
   while(1) {
     puts("kzload> ");
@@ -71,7 +73,16 @@ int main(void) {
       puts("size: "); putxval(size, 0); puts("\n");
       dump(loadbuf, size);
     } else if(!strcmp(buf, "run")) {
-      elf_load(loadbuf);
+      entry_point = elf_load(loadbuf);
+      if(!entry_point) {
+        puts("run error!\n");
+      } else {
+        puts("starting from entry point: ");
+        putxval((unsigned long)entry_point, 0);
+        puts("\n");
+        f = (void (*)(void))entry_point;
+        f();
+      }
     } else {
       puts("unknown\n");
     }
