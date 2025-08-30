@@ -1,0 +1,13 @@
+services:
+  makeos:
+    image: sat0ken/makeos-centos
+    container_name: makeos
+    volumes:
+      - .:/work
+    working_dir: /work
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    tty: true
+    stdin_open: true
+    environment:
+      - IN_CONTAINER=true

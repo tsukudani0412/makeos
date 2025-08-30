@@ -1,0 +1,3 @@
+tools/h8write/h8write
+build/*
+kzload*
