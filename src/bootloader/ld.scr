@@ -15,7 +15,7 @@ MEMORY {
 
 SECTIONS {
   .vectors : {
-    build/vector.o(.data)
+    build/bootloader/vector.o(.data)
   } > vectors
 
   .text : {
