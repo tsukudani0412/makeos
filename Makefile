@@ -28,27 +28,24 @@ OBJDUMP = $(BINDIR)/$(ADDNAME)objdump
 RANLIB  = $(BINDIR)/$(ADDNAME)ranlib
 STRIP   = $(BINDIR)/$(ADDNAME)strip
 
-H8WRITE = /work/tools/h8write/h8write
-H8WRITE_SERDEV = /dev/ttyUSB0
-
 VPATH = $(SRCDIR)
 
-C_SOURCES = main.c lib.c serial.c vector.c xmodem.c elf.c
+C_SOURCES = main.c lib.c serial.c
 S_SOURCES = startup.s
 
 OBJS = $(addprefix $(BUILDDIR)/, $(C_SOURCES:.c=.o) $(S_SOURCES:.s=.o))
 
-TARGET = kzload
+TARGET = kozos
 
 CFLAGS  = -Wall -mh -nostdinc -nostdlib -fno-builtin
 CFLAGS += -I$(SRCDIR)
 CFLAGS += -Os
-CFLAGS += -DKZLOAD
+CFLAGS += -DKOZOS
 
 LFLAGS = -static -T $(SRCDIR)/ld.scr -L$(BUILDDIR)
 
 
-.PHONY: all image write clean
+.PHONY: all clean
 
 all: $(TARGET)
 
@@ -71,20 +68,9 @@ $(BUILDDIR)/%.o: %.s | $(BUILDDIR)
 	@echo "Compiling S: $<"
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(TARGET).mot: $(TARGET)
-	@echo "Creating MOT file..."
-	$(OBJCOPY) -O srec $(TARGET) $(TARGET).mot
-
-image: $(TARGET).mot
-
-write: $(TARGET).mot
-	$(H8WRITE) -3069 -f20 $(TARGET).mot $(H8WRITE_SERDEV)
-
 clean:
 	@echo "Cleaning build directory..."
 	rm -rf $(BUILDDIR)
 	rm -rf $(TARGET) $(TARGET).elf $(TARGET).mot
 
-make_h8write :
-								gcc /work/tools/h8write/h8write.c -o /work/tools/h8write/h8write
 endif
