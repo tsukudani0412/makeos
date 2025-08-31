@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "interrupt.h"
 #include "serial.h"
 #include "xmodem.h"
 #include "elf.h"
@@ -10,6 +11,8 @@ static int init(void) {
 
   memcpy(&data_start, &erodata, (long)&edata - (long)&data_start);
   memset(&bss_start, 0, (long)&ebss - (long)&bss_start);
+
+  softvec_init();
 
   serial_init(SERIAL_DEFAULT_DEVICE);
 
@@ -52,6 +55,8 @@ int main(void) {
   void (*f)(void);
   extern int buffer_start;
 
+  INTR_DISABLE;
+
   init();
 
   puts("\nkzload (kozos boot loader) started.\n");
@@ -65,7 +70,7 @@ int main(void) {
       size = xmodem_recv(loadbuf);
       wait();
       if(size < 0) {
-        puts("\n XMODEM receive error!\n");
+        puts("\nXMODEM receive error!\n");
       } else {
         puts("\nXMODEM receive suceeded!\n");
       }

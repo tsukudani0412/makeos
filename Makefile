@@ -33,9 +33,9 @@ BL_SRCDIR    := src/bootloader
 BL_BUILDDIR  := build/bootloader
 BL_TARGET    := kzload
 
-BL_C_SOURCES = main.c lib.c serial.c vector.c xmodem.c elf.c
-BL_S_SOURCES = startup.s
-BL_OBJS      = $(addprefix $(BL_BUILDDIR)/, $(BL_C_SOURCES:.c=.o) $(BL_S_SOURCES:.s=.o))
+BL_C_SOURCES = main.c lib.c serial.c vector.c xmodem.c elf.c interrupt.c
+BL_S_SOURCES = startup.S intr.S
+BL_OBJS      = $(addprefix $(BL_BUILDDIR)/, $(BL_C_SOURCES:.c=.o) $(BL_S_SOURCES:.S=.o))
 
 BL_CFLAGS    = -Wall -mh -nostdinc -nostdlib -fno-builtin
 BL_CFLAGS   += -I$(BL_SRCDIR)
@@ -49,9 +49,9 @@ OS_SRCDIR    := src/os
 OS_BUILDDIR  := build/os
 OS_TARGET    := kozos
 
-OS_C_SOURCES = main.c lib.c serial.c
-OS_S_SOURCES = startup.s
-OS_OBJS      = $(addprefix $(OS_BUILDDIR)/, $(OS_C_SOURCES:.c=.o) $(OS_S_SOURCES:.s=.o))
+OS_C_SOURCES = main.c lib.c serial.c interrupt.c
+OS_S_SOURCES = startup.S
+OS_OBJS      = $(addprefix $(OS_BUILDDIR)/, $(OS_C_SOURCES:.c=.o) $(OS_S_SOURCES:.S=.o))
 
 OS_CFLAGS    = -Wall -mh -nostdinc -nostdlib -fno-builtin
 OS_CFLAGS   += -I$(OS_SRCDIR)
@@ -83,6 +83,9 @@ $(BL_BUILDDIR)/%.o: $(BL_SRCDIR)/%.s | $(BL_BUILDDIR)
 	@echo "Compiling S for bootloader: $<"
 	$(CC) -c $(BL_CFLAGS) -o $@ $<
 
+$(BL_BUILDDIR)/%.o: $(BL_SRCDIR)/%.S | $(BL_BUILDDIR)
+	@echo "Compiling S for bootloader: $<"
+	$(CC) -c $(BL_CFLAGS) -o $@ $<
 
 os: $(OS_TARGET)
 
@@ -97,10 +100,13 @@ $(OS_BUILDDIR)/%.o: $(OS_SRCDIR)/%.c | $(OS_BUILDDIR)
 	@echo "Compiling C for OS: $<"
 	$(CC) -c $(OS_CFLAGS) -o $@ $<
 
-$(OS_BUILDDIR)/%.o: $(OS_SRCDIR)/%.s | $(OS_BUILDDIR)
+$(BL_BUILDDIR)/%.o: $(OS_SRCDIR)/%.s | $(OS_BUILDDIR)
 	@echo "Compiling S for OS: $<"
 	$(CC) -c $(OS_CFLAGS) -o $@ $<
 
+$(OS_BUILDDIR)/%.o: $(OS_SRCDIR)/%.S | $(OS_BUILDDIR)
+	@echo "Compiling S for OS: $<"
+	$(CC) -c $(OS_CFLAGS) -o $@ $<
 
 $(BL_BUILDDIR) $(OS_BUILDDIR):
 	@echo "Creating build directory: $@"
