@@ -6,6 +6,7 @@
 
 static int start_threads(int argc, char *argv[]) {
   kz_run(test08_1_main, "command", 0x100, 0, NULL);
+  /*kz_run(test08_1_sub, "sub", 0x100, 0, NULL);*/
   return 0;
 }
 

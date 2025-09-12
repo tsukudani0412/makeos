@@ -22,3 +22,8 @@ int test08_1_main(int argc, char *argv[]) {
     }
   }
 }
+
+int test08_1_sub(int argc, char **argv) {
+  puts("2nd thread started\n");
+  return 0;
+}
