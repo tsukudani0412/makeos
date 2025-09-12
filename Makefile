@@ -49,7 +49,7 @@ OS_SRCDIR    := src/os
 OS_BUILDDIR  := build/os
 OS_TARGET    := kozos
 
-OS_C_SOURCES = main.c lib.c serial.c interrupt.c kozos.c syscall.c test08_1.c
+OS_C_SOURCES = main.c lib.c serial.c interrupt.c kozos.c syscall.c test09_1.c test09_2.c test09_3.c
 OS_S_SOURCES = startup.S
 OS_OBJS      = $(addprefix $(OS_BUILDDIR)/, $(OS_C_SOURCES:.c=.o) $(OS_S_SOURCES:.S=.o))
 
