@@ -111,7 +111,7 @@ void serial_intr_send_enable(int index) {
   sci->scr |= H8_3069F_SCI_SCR_TIE;
 }
 
-void serial_intr_send_diable(int index) {
+void serial_intr_send_disable(int index) {
   volatile struct h8_3069f_sci *sci = regs[index].sci;
   sci->scr &= ~H8_3069F_SCI_SCR_TIE;
 }
