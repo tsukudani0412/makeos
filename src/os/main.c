@@ -4,8 +4,8 @@
 #include "lib.h"
 
 static int start_threads(int argc, char *argv[]) {
-  kz_run(test11_1_main, "test11_1", 1, 0x100, 0, NULL);
-  kz_run(test11_2_main, "test11_2", 1, 0x100, 0, NULL);
+  kz_run(consdrv_main, "consdrv", 1, 0x200, 0, NULL);
+  kz_run(command_main, "command", 8, 0x200, 0, NULL);
 
   kz_chpri(15);
   INTR_ENABLE;
