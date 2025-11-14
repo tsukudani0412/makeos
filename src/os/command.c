@@ -19,7 +19,7 @@ static void send_write(char *str) {
   len = strlen(str);
   p = kz_kmalloc(len + 2);
   p[0] = '0';
-  p[1] = CONSDRV_CMF_WRITE;
+  p[1] = CONSDRV_CMD_WRITE;
   memcpy(&p[2], str, len);
   kz_send(MSGBOX_ID_CONSOUTPUT, len+2, p);
 }

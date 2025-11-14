@@ -106,7 +106,7 @@ static int consdrv_command(struct consreg *cons, kz_thread_id_t id, int index, i
       serial_init(cons->index);
       serial_intr_recv_enable(cons->index);
       break;
-    case CONSDRV_CMF_WRITE:
+    case CONSDRV_CMD_WRITE:
       INTR_DISABLE;
       send_string(cons, command+1, size-1);
       INTR_ENABLE;

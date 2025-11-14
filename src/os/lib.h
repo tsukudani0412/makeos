@@ -12,6 +12,6 @@ int putc(unsigned char c);
 unsigned char getc(void);
 int puts(unsigned char *str);
 int gets(unsigned char *buf);
-int putxval(unsigned long value, int colum);
+int putxval(unsigned long value, int column);
 
 #endif
