@@ -1,13 +1,13 @@
 #include "defines.h"
-#include "kozos.h"
+#include "sayo-os.h"
 #include "interrupt.h"
 #include "lib.h"
 
 static int start_threads(int argc, char *argv[]) {
-  kz_run(consdrv_main, "consdrv", 1, 0x200, 0, NULL);
-  kz_run(command_main, "command", 8, 0x200, 0, NULL);
+  sy_run(consdrv_main, "consdrv", 1, 0x200, 0, NULL);
+  sy_run(command_main, "command", 8, 0x200, 0, NULL);
 
-  kz_chpri(15);
+  sy_chpri(15);
   INTR_ENABLE;
   while(1) {
     asm volatile ("sleep");
@@ -21,7 +21,7 @@ int main(void) {
 
   puts("\nkozos boot succeed!\n");
 
-  kz_start(start_threads, "idle", 0, 0x100, 0, NULL);
+  sy_start(start_threads, "idle", 0, 0x100, 0, NULL);
 
   return 0;
 }

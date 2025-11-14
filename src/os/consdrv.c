@@ -1,5 +1,5 @@
 #include "defines.h"
-#include "kozos.h"
+#include "sayo-os.h"
 #include "intr.h"
 #include "interrupt.h"
 #include "serial.h"
@@ -9,7 +9,7 @@
 #define CONS_BUFFER_SIZE 24
 
 static struct consreg {
-  kz_thread_id_t id;
+  sy_thread_id_t id;
   int index;
 
   char *send_buf;
@@ -94,13 +94,13 @@ static int consdrv_init(void) {
   return 0;
 }
 
-static int consdrv_command(struct consreg *cons, kz_thread_id_t id, int index, int size, char *command) {
+static int consdrv_command(struct consreg *cons, sy_thread_id_t id, int index, int size, char *command) {
   switch(command[0]) {
     case CONSDRV_CMD_USE:
       cons->id = id;
       cons-> index = command[1] - '0';
-      cons->send_buf = kz_kmalloc(CONS_BUFFER_SIZE);
-      cons->recv_buf = kz_kmalloc(CONS_BUFFER_SIZE);
+      cons->send_buf = sy_kmalloc(CONS_BUFFER_SIZE);
+      cons->recv_buf = sy_kmalloc(CONS_BUFFER_SIZE);
       cons->send_len = 0;
       cons->recv_len = 0;
       serial_init(cons->index);
@@ -120,17 +120,17 @@ static int consdrv_command(struct consreg *cons, kz_thread_id_t id, int index, i
 
 int consdrv_main(int argc, char *argv[]) {
   int size, index;
-  kz_thread_id_t id;
+  sy_thread_id_t id;
   char *p;
 
   consdrv_init();
-  kz_setintr(SOFTVEC_TYPE_SERINTR, consdrv_intr);
+  sy_setintr(SOFTVEC_TYPE_SERINTR, consdrv_intr);
 
   while(1) {
-    id = kz_recv(MSGBOX_ID_CONSOUTPUT, &size, &p);
+    id = sy_recv(MSGBOX_ID_CONSOUTPUT, &size, &p);
     index = p[0] - '0';
     consdrv_command(&consreg[index], id, index, size-1, p+1);
-    kz_kmfree(p);
+    sy_kmfree(p);
   }
 
   return 0;

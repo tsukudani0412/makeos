@@ -1,8 +1,8 @@
-#ifndef _KOZOS_MEMORY_H_INCLUDED_
-#define _KOZOS_MEMORY_H_INCLUDED_
+#ifndef _SAYO_OS_MEMORY_H_INCLUDED_
+#define _SAYO_OS_MEMORY_H_INCLUDED_
 
-int kzmem_init(void);
-void *kzmem_alloc(int size);
-void kzmem_free(void *mem);
+int symem_init(void);
+void *symem_alloc(int size);
+void symem_free(void *mem);
 
 #endif

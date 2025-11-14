@@ -1,34 +1,34 @@
-#ifndef _KOZOS_SYSCALL_H_INCLUDED_
-#define _KOZOS_SYSCALL_H_INCLUDED_
+#ifndef _SAYO_OS_SYSCALL_H_INCLUDED_
+#define _SAYO_OS_SYSCALL_H_INCLUDED_
 
 #include "defines.h"
 #include "interrupt.h"
 
 typedef enum {
-  KZ_SYSCALL_TYPE_RUN = 0,
-  KZ_SYSCALL_TYPE_EXIT,
-  KZ_SYSCALL_TYPE_WAIT,
-  KZ_SYSCALL_TYPE_SLEEP,
-  KZ_SYSCALL_TYPE_WAKEUP,
-  KZ_SYSCALL_TYPE_GETID,
-  KZ_SYSCALL_TYPE_CHPRI,
-  KZ_SYSCALL_TYPE_KMALLOC,
-  KZ_SYSCALL_TYPE_KMFREE,
-  KZ_SYSCALL_TYPE_SEND,
-  KZ_SYSCALL_TYPE_RECV,
-  KZ_SYSCALL_TYPE_SETINTR,
-} kz_syscall_type_t;
+  SY_SYSCALL_TYPE_RUN = 0,
+  SY_SYSCALL_TYPE_EXIT,
+  SY_SYSCALL_TYPE_WAIT,
+  SY_SYSCALL_TYPE_SLEEP,
+  SY_SYSCALL_TYPE_WAKEUP,
+  SY_SYSCALL_TYPE_GETID,
+  SY_SYSCALL_TYPE_CHPRI,
+  SY_SYSCALL_TYPE_KMALLOC,
+  SY_SYSCALL_TYPE_KMFREE,
+  SY_SYSCALL_TYPE_SEND,
+  SY_SYSCALL_TYPE_RECV,
+  SY_SYSCALL_TYPE_SETINTR,
+} sy_syscall_type_t;
 
 typedef struct {
   union {
     struct {
-      kz_func_t func;
+      sy_func_t func;
       char *name;
       int priority;
       int stacksize;
       int argc;
       char **argv;
-      kz_thread_id_t ret;
+      sy_thread_id_t ret;
     } run;
     struct {
       int dummy;
@@ -40,11 +40,11 @@ typedef struct {
       int ret;
     } sleep;
     struct {
-      kz_thread_id_t id;
+      sy_thread_id_t id;
       int ret;
     } wakeup;
     struct {
-      kz_thread_id_t ret;
+      sy_thread_id_t ret;
     } getid;
     struct {
       int priority;
@@ -59,23 +59,23 @@ typedef struct {
       int ret;
     } kmfree;
     struct {
-      kz_msgbox_id_t id;
+      sy_msgbox_id_t id;
       int size;
       char *p;
       int ret;
     } send;
     struct {
-      kz_msgbox_id_t id;
+      sy_msgbox_id_t id;
       int *sizep;
       char **pp;
-      kz_thread_id_t ret;
+      sy_thread_id_t ret;
     } recv;
     struct {
       softvec_type_t type;
-      kz_handler_t handler;
+      sy_handler_t handler;
       int ret;
     } setintr;
   } un;
-} kz_syscall_param_t;
+} sy_syscall_param_t;
 
 #endif

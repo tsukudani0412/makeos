@@ -31,7 +31,7 @@ H8WRITE_SERDEV = /dev/ttyUSB0
 
 BL_SRCDIR    := src/bootloader
 BL_BUILDDIR  := build/bootloader
-BL_TARGET    := kzload
+BL_TARGET    := syload
 
 BL_C_SOURCES = main.c lib.c serial.c vector.c xmodem.c elf.c interrupt.c
 BL_S_SOURCES = startup.S intr.S
@@ -40,23 +40,23 @@ BL_OBJS      = $(addprefix $(BL_BUILDDIR)/, $(BL_C_SOURCES:.c=.o) $(BL_S_SOURCES
 BL_CFLAGS    = -Wall -mh -nostdinc -nostdlib -fno-builtin
 BL_CFLAGS   += -I$(BL_SRCDIR)
 BL_CFLAGS   += -Os
-BL_CFLAGS   += -DKZLOAD
+BL_CFLAGS   += -DSYLOAD
 
 BL_LFLAGS    = -static -T $(BL_SRCDIR)/ld.scr -L$(BL_BUILDDIR)
 
 
 OS_SRCDIR    := src/os
 OS_BUILDDIR  := build/os
-OS_TARGET    := kozos
+OS_TARGET    := sayos
 
-OS_C_SOURCES = main.c lib.c serial.c interrupt.c kozos.c syscall.c memory.c consdrv.c command.c
+OS_C_SOURCES = main.c lib.c serial.c interrupt.c sayo-os.c syscall.c memory.c consdrv.c command.c
 OS_S_SOURCES = startup.S
 OS_OBJS      = $(addprefix $(OS_BUILDDIR)/, $(OS_C_SOURCES:.c=.o) $(OS_S_SOURCES:.S=.o))
 
 OS_CFLAGS    = -Wall -mh -nostdinc -nostdlib -fno-builtin
 OS_CFLAGS   += -I$(OS_SRCDIR)
 OS_CFLAGS   += -Os
-OS_CFLAGS   += -DKOZOS
+OS_CFLAGS   += -DSAYOS
 
 OS_LFLAGS    = -static -T $(OS_SRCDIR)/ld.scr -L$(OS_BUILDDIR)
 

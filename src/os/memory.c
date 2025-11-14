@@ -1,35 +1,35 @@
 #include "defines.h"
-#include "kozos.h"
+#include "sayo-os.h"
 #include "lib.h"
 #include "memory.h"
 
 /* memory block header */
-typedef struct _kzmem_block {
-  struct _kzmem_block *next;
+typedef struct _symem_block {
+  struct _symem_block *next;
   int size;
-} kzmem_block;
+} symem_block;
 
 /* memory pool */
-typedef struct _kzmem_pool {
+typedef struct _symem_pool {
   int size;
   int num;
-  kzmem_block *free;
-} kzmem_pool;
+  symem_block *free;
+} symem_pool;
 
-static kzmem_pool pool[] = {
+static symem_pool pool[] = {
   {16, 8, NULL}, {32, 8, NULL}, {64, 4, NULL}
 };
 
 #define MEMORY_AREA_NUM (sizeof(pool) / sizeof(*pool))
 
-static int kzmem_init_pool(kzmem_pool *p) {
+static int symem_init_pool(symem_pool *p) {
   int i;
-  kzmem_block *mp;
-  kzmem_block **mpp;
+  symem_block *mp;
+  symem_block **mpp;
   extern char freearea;
   static char *area = &freearea;
 
-  mp = (kzmem_block*)area;
+  mp = (symem_block*)area;
 
   mpp = &p->free;
   for(i=0; i<p->num; i++) {
@@ -37,33 +37,33 @@ static int kzmem_init_pool(kzmem_pool *p) {
     memset(mp, 0, sizeof(*mp));
     mp->size = p->size;
     mpp = &(mp->next);
-    mp = (kzmem_block *)((char *)mp + p->size);
+    mp = (symem_block *)((char *)mp + p->size);
     area += p->size;
   }
 
   return 0;
 }
 
-int kzmem_init(void) {
+int symem_init(void) {
   int i;
   for(i=0; i<MEMORY_AREA_NUM; i++) {
-    kzmem_init_pool(&pool[i]);
+    symem_init_pool(&pool[i]);
   }
   return 0;
 }
 
-void *kzmem_alloc(int size) {
+void *symem_alloc(int size) {
   int i;
-  kzmem_block *mp;
-  kzmem_pool *p;
+  symem_block *mp;
+  symem_pool *p;
 
   for(i=0; i<MEMORY_AREA_NUM; i++) {
     p = &pool[i];
 
-    if(size <= (p->size - sizeof(kzmem_block))) {
+    if(size <= (p->size - sizeof(symem_block))) {
       if(p->free == NULL) {
         /* if memory block exhausted */
-        kz_sysdown();
+        sy_sysdown();
         return NULL;
       }
       mp = p->free;
@@ -75,16 +75,16 @@ void *kzmem_alloc(int size) {
     }
   }
   /* size exceeded all block size */
-  kz_sysdown();
+  sy_sysdown();
   return NULL;
 }
 
-void kzmem_free(void *mem) {
+void symem_free(void *mem) {
   int i;
-  kzmem_block *mp;
-  kzmem_pool *p;
+  symem_block *mp;
+  symem_pool *p;
 
-  mp = ((kzmem_block *)mem - 1);
+  mp = ((symem_block *)mem - 1);
 
   for(i=0; i<MEMORY_AREA_NUM; i++) {
     p = &pool[i];
@@ -94,7 +94,7 @@ void kzmem_free(void *mem) {
       return;
     }
   }
-  kz_sysdown();
+  sy_sysdown();
 }
 
 

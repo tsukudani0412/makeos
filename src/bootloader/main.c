@@ -59,10 +59,10 @@ int main(void) {
 
   init();
 
-  puts("\nkzload (kozos boot loader) started.\n");
+  puts("\nsyload (Sayo OS boot loader) started.\n");
 
   while(1) {
-    puts("kzload> ");
+    puts("syload> ");
     gets(buf);
 
     if(!strcmp(buf, "load")) {
